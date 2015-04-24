@@ -43,4 +43,7 @@ public class MediaComponentState extends JavaScriptComponentState {
 	public boolean muted;
 	public float volume;
 	public int currentTime;
+	
+	// LOD state
+	public boolean showControls;
 }

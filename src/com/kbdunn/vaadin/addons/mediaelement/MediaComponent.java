@@ -3,15 +3,15 @@ package com.kbdunn.vaadin.addons.mediaelement;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ResourceReference;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
+
+import elemental.json.JsonArray;
+import elemental.json.JsonException;
 
 @JavaScript({"vaadin://addons/mejs-player/mediaelement-2.16.4/jquery.js", "vaadin://addons/mejs-player/mediaelement-2.16.4/mediaelement-and-player.min.js", 
 	"vaadin://addons/mejs-player/mejs-player.js", "vaadin://addons/mejs-player/mejs-player-connector.js"})
@@ -66,19 +66,21 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 		addFunction("updateSharedState", new JavaScriptFunction() {
 			private static final long serialVersionUID = 5490315638431042879L;
 			
+
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) {
 				try {
 					getState().paused = arguments.getBoolean(0);
 					getState().ended = arguments.getBoolean(1);
 					getState().seeking = arguments.getBoolean(2);
-					getState().duration = arguments.getInt(3);
+					getState().duration = (int) arguments.getNumber(3);
 					getState().muted = arguments.getBoolean(4);
-					getState().volume = (float) arguments.getDouble(5);
-					getState().currentTime = arguments.getInt(6);
-				} catch (JSONException e) {
+					getState().volume = (float) arguments.getNumber(5);
+					getState().currentTime = (int) arguments.getNumber(6);
+				} catch (JsonException e) {
 					// Ignore
 				}
+				
 			}
 		});
 	}
@@ -230,7 +232,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (PlaybackEndedListener listener : playbackEndedListeners)
 					listener.playbackEnded(getMe());
 			}
@@ -240,7 +242,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (CanPlayListener listener : canPlayListeners)
 					listener.canPlay(getMe());
 			}
@@ -250,7 +252,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (LoadedMetadataListener listener : loadedMetadataListeners)
 					listener.metadataLoaded(getMe());
 			}
@@ -260,7 +262,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (LoadedDataListener listener : loadedDataListeners)
 					listener.dataLoaded(getMe());
 			}
@@ -270,7 +272,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (PausedListener listener : pauseListeners)
 					listener.paused(getMe());
 			}
@@ -280,7 +282,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (PlayingListener listener : playingListeners)
 					listener.playing(getMe());
 			}
@@ -290,7 +292,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 			
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (PlayedListener listener : playListeners)
 					listener.played(getMe());
 			}
@@ -300,7 +302,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (SeekedListener listener : seekedListeners)
 					listener.seeked(getMe());
 			}
@@ -310,7 +312,7 @@ public class MediaComponent extends AbstractJavaScriptComponent implements Seria
 			private static final long serialVersionUID = 5490315638431042879L;
 
 			@Override
-			public void call(JSONArray arguments) throws JSONException {
+			public void call(JsonArray arguments) throws JsonException {
 				for (VolumeChangedListener listener : volumeChangeListeners)
 					listener.volumeChanged(getMe());
 			}
